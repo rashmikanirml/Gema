@@ -1,0 +1,97 @@
+<div class="bookings-container">
+  <header class="bookings-header">
+    <div class="header-content">
+      <h1>My Bookings</h1>
+      <button class="btn-back" (click)="goBack()">← Back to Dashboard</button>
+    </div>
+  </header>
+
+  <main class="bookings-main">
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="loading" class="loading-message">
+      Loading your bookings...
+    </div>
+
+    <div *ngIf="!loading && bookings.length === 0" class="no-bookings">
+      <p>You don't have any bookings yet.</p>
+      <button class="btn-explore" (click)="goBack()">Explore Packages</button>
+    </div>
+
+    <div class="bookings-list">
+      <div *ngFor="let booking of bookings" class="booking-item">
+        <div class="booking-header">
+          <div class="booking-title">
+            <h3>{{ booking.Package?.name }}</h3>
+            <span class="booking-id">Booking #{{ booking.id }}</span>
+          </div>
+          <span [class]="'status ' + getStatusClass(booking.status)">
+            {{ booking.status | uppercase }}
+          </span>
+        </div>
+
+        <div class="booking-details">
+          <div class="detail-column">
+            <div class="detail-item">
+              <span class="label">Destination:</span>
+              <span class="value">{{ booking.Package?.Destination?.name }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Hotel:</span>
+              <span class="value">{{ booking.Package?.Hotel?.name }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Vehicle:</span>
+              <span class="value">{{ booking.Package?.Vehicle?.name }}</span>
+            </div>
+          </div>
+
+          <div class="detail-column">
+            <div class="detail-item">
+              <span class="label">Check-in:</span>
+              <span class="value">{{ booking.check_in_date | date: 'MMM dd, yyyy' }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Check-out:</span>
+              <span class="value">{{ booking.check_out_date | date: 'MMM dd, yyyy' }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Guests:</span>
+              <span class="value">{{ booking.number_of_guests }}</span>
+            </div>
+          </div>
+
+          <div class="detail-column">
+            <div class="detail-item">
+              <span class="label">Booked On:</span>
+              <span class="value">{{ booking.createdAt | date: 'MMM dd, yyyy' }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Duration:</span>
+              <span class="value">{{ booking.Package?.duration_days }} days</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Total Amount:</span>
+              <span class="value amount">฿{{ booking.total_amount | number }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="booking-actions">
+          <button class="btn-view" (click)="viewDetails(booking.id)">
+            View Details
+          </button>
+          <button 
+            class="btn-cancel"
+            (click)="cancelBooking(booking.id)"
+            [disabled]="booking.status === 'cancelled' || booking.status === 'completed'"
+          >
+            Cancel Booking
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

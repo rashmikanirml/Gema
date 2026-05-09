@@ -1,0 +1,107 @@
+<div class="payment-container">
+  <div class="payment-card">
+    <button class="btn-back" (click)="goBack()">← Back</button>
+
+    <h2>Complete Payment</h2>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="successMessage" class="success-message">
+      {{ successMessage }}
+    </div>
+
+    <div class="payment-content">
+      <!-- Booking Details -->
+      <div class="booking-details" *ngIf="booking">
+        <h3>Booking Details</h3>
+        <div class="details-grid">
+          <div class="detail-row">
+            <span class="label">Booking ID:</span>
+            <span class="value">#{{ booking.id }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Package:</span>
+            <span class="value">{{ booking.Package?.name }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Check-in:</span>
+            <span class="value">{{ booking.check_in_date | date: 'MMM dd, yyyy' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Check-out:</span>
+            <span class="value">{{ booking.check_out_date | date: 'MMM dd, yyyy' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Guests:</span>
+            <span class="value">{{ booking.number_of_guests }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Status:</span>
+            <span class="value">{{ booking.status | uppercase }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Form -->
+      <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" class="payment-form">
+        <div class="form-group">
+          <label for="paymentMethod">Select Payment Method</label>
+          <select
+            id="paymentMethod"
+            class="form-control"
+            formControlName="paymentMethod"
+          >
+            <option *ngFor="let method of paymentMethods" [value]="method">
+              {{ getPaymentMethodLabel(method) }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Payment Summary -->
+        <div class="payment-summary" *ngIf="booking">
+          <h4>Payment Summary</h4>
+          <div class="summary-row">
+            <span class="label">Subtotal:</span>
+            <span class="value">฿{{ booking.total_amount | number }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Taxes:</span>
+            <span class="value">฿0.00</span>
+          </div>
+          <div class="summary-row total">
+            <span class="label">Total Amount:</span>
+            <span class="amount">฿{{ booking.total_amount | number }}</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-pay" [disabled]="loading">
+            {{ loading ? 'Processing...' : 'Complete Payment' }}
+          </button>
+          <button type="button" class="btn-cancel" (click)="goBack()">
+            Cancel
+          </button>
+        </div>
+      </form>
+
+      <!-- Payment Methods Info -->
+      <div class="payment-methods-info">
+        <h4>Payment Methods</h4>
+        <div class="method-info">
+          <strong>💳 Credit/Debit Card</strong>
+          <p>Fast and secure payment via Visa, Mastercard, or other cards</p>
+        </div>
+        <div class="method-info">
+          <strong>🏦 Bank Transfer</strong>
+          <p>Direct transfer from your bank account</p>
+        </div>
+        <div class="method-info">
+          <strong>💼 E-Wallet</strong>
+          <p>Pay using your e-wallet or mobile banking app</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

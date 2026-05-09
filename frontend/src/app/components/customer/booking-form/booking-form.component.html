@@ -1,0 +1,125 @@
+<div class="booking-container">
+  <div class="booking-card">
+    <button class="btn-back" (click)="goBack()">← Back to Packages</button>
+
+    <h2>Complete Your Booking</h2>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="successMessage" class="success-message">
+      {{ successMessage }}
+    </div>
+
+    <div class="booking-content">
+      <!-- Package Summary -->
+      <div class="package-summary" *ngIf="pkg">
+        <h3>{{ pkg.name }}</h3>
+        <div class="summary-details">
+          <div class="summary-row">
+            <span class="label">Destination:</span>
+            <span class="value">{{ pkg.Destination?.name }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Hotel:</span>
+            <span class="value">{{ pkg.Hotel?.name }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Vehicle:</span>
+            <span class="value">{{ pkg.Vehicle?.name }} ({{ pkg.Vehicle?.type }})</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Price per Day:</span>
+            <span class="value">฿{{ pkg.price_per_day | number }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Package Duration:</span>
+            <span class="value">{{ pkg.duration_days }} days</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking Form -->
+      <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form">
+        <div class="form-group">
+          <label for="numberOfGuests">Number of Guests</label>
+          <input
+            type="number"
+            id="numberOfGuests"
+            class="form-control"
+            formControlName="numberOfGuests"
+            [class.is-invalid]="submitted && f['numberOfGuests'].errors"
+            min="1"
+            max="10"
+          />
+          <div *ngIf="submitted && f['numberOfGuests'].errors" class="invalid-feedback">
+            <div *ngIf="f['numberOfGuests'].errors['required']">Number of guests is required</div>
+            <div *ngIf="f['numberOfGuests'].errors['min']">At least 1 guest required</div>
+            <div *ngIf="f['numberOfGuests'].errors['max']">Maximum 10 guests allowed</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="checkInDate">Check-in Date</label>
+            <input
+              type="date"
+              id="checkInDate"
+              class="form-control"
+              formControlName="checkInDate"
+              [class.is-invalid]="submitted && f['checkInDate'].errors"
+            />
+            <div *ngIf="submitted && f['checkInDate'].errors" class="invalid-feedback">
+              Check-in date is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="checkOutDate">Check-out Date</label>
+            <input
+              type="date"
+              id="checkOutDate"
+              class="form-control"
+              formControlName="checkOutDate"
+              [class.is-invalid]="submitted && f['checkOutDate'].errors"
+            />
+            <div *ngIf="submitted && f['checkOutDate'].errors" class="invalid-feedback">
+              Check-out date is required
+            </div>
+          </div>
+        </div>
+
+        <!-- Booking Summary -->
+        <div class="booking-summary">
+          <h4>Booking Summary</h4>
+          <div class="summary-row">
+            <span class="label">Total Days:</span>
+            <span class="value">{{ calculateTotalDays() }} day(s)</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Price per Day:</span>
+            <span class="value">฿{{ pkg?.price_per_day | number }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Number of Guests:</span>
+            <span class="value">{{ f['numberOfGuests'].value }}</span>
+          </div>
+          <div class="summary-row total">
+            <span class="label">Total Price:</span>
+            <span class="amount">฿{{ calculateTotalPrice() | number }}</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-book" [disabled]="loading">
+            {{ loading ? 'Processing...' : 'Proceed to Payment' }}
+          </button>
+          <button type="button" class="btn-cancel" (click)="goBack()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

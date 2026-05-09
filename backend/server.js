@@ -51,10 +51,23 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Import routes (to be added)
-// app.use('/api/auth', require('./routes/auth'));
-// app.use('/api/destinations', require('./routes/destinations'));
-// etc.
+// Import routes
+const authRoutes = require('./routes/auth.routes');
+const destinationRoutes = require('./routes/destination.routes');
+const hotelRoutes = require('./routes/hotel.routes');
+const vehicleRoutes = require('./routes/vehicle.routes');
+const packageRoutes = require('./routes/package.routes');
+const bookingRoutes = require('./routes/booking.routes');
+const paymentRoutes = require('./routes/payment.routes');
+
+// Register routes
+app.use('/api/auth', authRoutes);
+app.use('/api/destinations', destinationRoutes);
+app.use('/api/hotels', hotelRoutes);
+app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/packages', packageRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // 404 handler
 app.use((req, res) => {

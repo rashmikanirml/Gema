@@ -1,0 +1,160 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1>Gema Travel</h1>
+      <div class="header-actions">
+        <span class="welcome-text">Welcome, {{ currentUser?.firstName }}!</span>
+        <button class="btn-link" (click)="viewMyBookings()">My Bookings</button>
+        <button class="btn-logout" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="dashboard-main">
+    <!-- Search Filters -->
+    <section class="filters-section">
+      <h2>Find Your Perfect Trip</h2>
+
+      <div class="filters-grid">
+        <div class="filter-group">
+          <label for="destination">Destination</label>
+          <select
+            id="destination"
+            [(ngModel)]="selectedDestination"
+            class="form-control"
+          >
+            <option value="">All Destinations</option>
+            <option *ngFor="let dest of destinations" [value]="dest.id">
+              {{ dest.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="budget">Max Budget: ฿{{ maxBudget | number }}</label>
+          <input
+            type="range"
+            id="budget"
+            min="1000"
+            max="50000"
+            step="1000"
+            [(ngModel)]="maxBudget"
+            class="range-input"
+          />
+          <div class="range-labels">
+            <span>฿1,000</span>
+            <span>฿50,000</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label for="minDuration">Min Days: {{ minDuration }}</label>
+          <input
+            type="range"
+            id="minDuration"
+            min="1"
+            max="30"
+            step="1"
+            [(ngModel)]="minDuration"
+            class="range-input"
+          />
+        </div>
+
+        <div class="filter-group">
+          <label for="maxDuration">Max Days: {{ maxDuration }}</label>
+          <input
+            type="range"
+            id="maxDuration"
+            min="1"
+            max="30"
+            step="1"
+            [(ngModel)]="maxDuration"
+            class="range-input"
+          />
+        </div>
+      </div>
+
+      <div class="filter-buttons">
+        <button class="btn-search" (click)="searchPackages()" [disabled]="loading">
+          {{ loading ? 'Searching...' : 'Search' }}
+        </button>
+        <button class="btn-reset" (click)="resetFilters()">Reset Filters</button>
+      </div>
+
+      <div *ngIf="error" class="error-message">{{ error }}</div>
+    </section>
+
+    <!-- Packages Grid -->
+    <section class="packages-section">
+      <h2>Available Packages</h2>
+
+      <div *ngIf="loading" class="loading-message">
+        Loading packages...
+      </div>
+
+      <div *ngIf="!loading && filteredPackages.length === 0" class="no-packages">
+        No packages found matching your criteria.
+      </div>
+
+      <div class="packages-grid">
+        <div *ngFor="let pkg of filteredPackages" class="package-card">
+          <div class="package-image" *ngIf="pkg.image">
+            <img [src]="pkg.image" alt="{{ pkg.name }}" />
+          </div>
+          <div class="package-image" *ngIf="!pkg.image" style="background: #ddd;">
+            <span>No Image</span>
+          </div>
+
+          <div class="package-body">
+            <h3>{{ pkg.name }}</h3>
+            <p class="destination">📍 {{ pkg.Destination?.name }}</p>
+            <p class="description">{{ pkg.description }}</p>
+
+            <div class="package-details">
+              <div class="detail-item">
+                <span class="label">Duration:</span>
+                <span class="value">{{ pkg.duration_days }} days</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Hotel:</span>
+                <span class="value">{{ pkg.Hotel?.name }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Vehicle:</span>
+                <span class="value">{{ pkg.Vehicle?.type }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Available:</span>
+                <span class="value">{{ pkg.available_slots }} slots</span>
+              </div>
+            </div>
+
+            <div class="package-footer">
+              <div class="price">
+                <span class="label">Total Price:</span>
+                <span class="amount">฿{{ pkg.total_price | number }}</span>
+              </div>
+              <div class="actions">
+                <button 
+                  class="btn-view"
+                  (click)="viewPackageDetails(pkg.id)"
+                >
+                  View Details
+                </button>
+                <button 
+                  class="btn-book"
+                  (click)="bookPackage(pkg.id)"
+                  [disabled]="pkg.available_slots === 0"
+                >
+                  {{ pkg.available_slots > 0 ? 'Book Now' : 'Sold Out' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

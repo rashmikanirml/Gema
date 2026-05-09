@@ -71,9 +71,19 @@ export class BookingService {
       .pipe(catchError(this.handleError));
   }
 
+  searchPackages(filters: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/packages/search`, filters)
+      .pipe(catchError(this.handleError));
+  }
+
   // Bookings
   getBookings(): Observable<Booking[]> {
     return this.http.get<Booking[]>(`${this.apiUrl}/bookings`)
+      .pipe(catchError(this.handleError));
+  }
+
+  getMyBookings(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/bookings`)
       .pipe(catchError(this.handleError));
   }
 
@@ -84,6 +94,22 @@ export class BookingService {
 
   getBookingById(id: number): Observable<Booking> {
     return this.http.get<Booking>(`${this.apiUrl}/bookings/${id}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  cancelBooking(id: number): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/bookings/${id}/cancel`, {})
+      .pipe(catchError(this.handleError));
+  }
+
+  // Payments
+  processPayment(paymentData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/payments`, paymentData)
+      .pipe(catchError(this.handleError));
+  }
+
+  getPaymentByBooking(bookingId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/payments/booking/${bookingId}`)
       .pipe(catchError(this.handleError));
   }
 
