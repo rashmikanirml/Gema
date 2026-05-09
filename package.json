@@ -1,0 +1,29 @@
+{
+  "name": "gema-hotel-booking-platform",
+  "version": "0.1.0",
+  "description": "Hotel booking platform for international tourists - PEAN stack",
+  "private": true,
+  "scripts": {
+    "start": "npm run dev:backend",
+    "dev:backend": "cd backend && npm start",
+    "dev:frontend": "cd frontend && ng serve",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && ng build",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && ng test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rashmikanirml/Gema.git"
+  },
+  "keywords": [
+    "hotel",
+    "booking",
+    "tourism",
+    "travel",
+    "package"
+  ],
+  "author": "",
+  "license": "Proprietary"
+}
