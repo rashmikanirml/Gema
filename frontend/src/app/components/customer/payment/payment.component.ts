@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BookingService } from '../../services/booking.service';
-import { AuthService } from '../../services/auth.service';
+import { BookingService } from '../../../services/booking.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-payment',
@@ -85,7 +85,7 @@ export class PaymentComponent implements OnInit {
           this.router.navigate(['/my-bookings']);
         }, 2000);
       },
-      (error) => {
+      (error: any) => {
         this.error = error.error?.error || 'Payment processing failed';
         this.loading = false;
       }

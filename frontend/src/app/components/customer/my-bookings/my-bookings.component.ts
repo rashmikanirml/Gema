@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { BookingService } from '../../services/booking.service';
+import { AuthService } from '../../../services/auth.service';
+import { BookingService } from '../../../services/booking.service';
 
 @Component({
   selector: 'app-my-bookings',
@@ -40,7 +40,7 @@ export class MyBookingsComponent implements OnInit {
         this.bookings = response.bookings || [];
         this.loading = false;
       },
-      (error) => {
+      (error: any) => {
         this.error = 'Failed to load bookings';
         this.loading = false;
       }
@@ -68,7 +68,7 @@ export class MyBookingsComponent implements OnInit {
         () => {
           this.loadMyBookings();
         },
-        (error) => {
+        (error: any) => {
           this.error = 'Failed to cancel booking';
         }
       );

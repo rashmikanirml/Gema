@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BookingService } from '../../services/booking.service';
-import { AuthService } from '../../services/auth.service';
+import { BookingService } from '../../../services/booking.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-booking-form',
@@ -61,7 +61,7 @@ export class BookingFormComponent implements OnInit {
       (response: any) => {
         this.pkg = response;
       },
-      (error) => {
+      (error: any) => {
         this.error = 'Failed to load package details';
       }
     );
@@ -121,7 +121,7 @@ export class BookingFormComponent implements OnInit {
           this.router.navigate(['/payment', response.booking.id]);
         }, 2000);
       },
-      (error) => {
+      (error: any) => {
         this.error = error.error?.error || 'Failed to create booking';
         this.loading = false;
       }

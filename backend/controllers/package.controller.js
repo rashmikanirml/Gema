@@ -6,10 +6,10 @@ exports.getAllPackages = async (req, res) => {
   try {
     const packages = await Package.findAll({
       include: [
-        { model: Destination },
-        { model: Hotel },
-        { model: Vehicle },
-        { model: Route }
+        { model: Destination, as: 'destination' },
+        { model: Hotel, as: 'hotel' },
+        { model: Vehicle, as: 'vehicle' },
+        { model: Route, as: 'route' }
       ],
       order: [['name', 'ASC']]
     });
@@ -30,10 +30,10 @@ exports.getPackageById = async (req, res) => {
     const { id } = req.params;
     const pkg = await Package.findByPk(id, {
       include: [
-        { model: Destination },
-        { model: Hotel },
-        { model: Vehicle },
-        { model: Route }
+        { model: Destination, as: 'destination' },
+        { model: Hotel, as: 'hotel' },
+        { model: Vehicle, as: 'vehicle' },
+        { model: Route, as: 'route' }
       ]
     });
 
@@ -78,10 +78,10 @@ exports.searchPackages = async (req, res) => {
     const packages = await Package.findAll({
       where: whereCondition,
       include: [
-        { model: Destination },
-        { model: Hotel },
-        { model: Vehicle },
-        { model: Route }
+        { model: Destination, as: 'destination' },
+        { model: Hotel, as: 'hotel' },
+        { model: Vehicle, as: 'vehicle' },
+        { model: Route, as: 'route' }
       ],
       order: [['total_price', 'ASC']]
     });

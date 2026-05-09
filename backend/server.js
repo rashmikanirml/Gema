@@ -24,8 +24,8 @@ const initializeDatabase = async () => {
     await models.sequelize.authenticate();
     console.log('✅ Database authenticated successfully');
 
-    // Sync models with database
-    await models.sequelize.sync({ alter: true });
+    // Sync models with database without altering existing enum columns on every boot
+    await models.sequelize.sync();
     console.log('✅ Database models synchronized');
 
     // Seed initial data (only if tables are empty)

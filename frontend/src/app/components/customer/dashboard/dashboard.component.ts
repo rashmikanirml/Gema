@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { BookingService } from '../../services/booking.service';
+import { AuthService } from '../../../services/auth.service';
+import { BookingService } from '../../../services/booking.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
       (response: any) => {
         this.destinations = response.destinations || [];
       },
-      (error) => {
+      (error: any) => {
         console.error('Error loading destinations:', error);
       }
     );
@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
         this.filteredPackages = [...this.packages];
         this.loading = false;
       },
-      (error) => {
+      (error: any) => {
         this.error = 'Failed to load packages';
         this.loading = false;
       }
@@ -89,7 +89,7 @@ export class DashboardComponent implements OnInit {
         this.filteredPackages = response.packages || [];
         this.loading = false;
       },
-      (error) => {
+      (error: any) => {
         this.error = 'Search failed';
         this.loading = false;
       }
