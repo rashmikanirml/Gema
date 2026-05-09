@@ -15,7 +15,15 @@ const sequelize = new Sequelize(
       min: 0,
       acquire: 30000,
       idle: 10000
-    }
+    },
+    // SSL configuration for cloud databases like Neon
+    ssl: process.env.DB_SSL === 'require' ? true : false,
+    dialectOptions: process.env.DB_SSL === 'require' ? {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    } : {}
   }
 );
 

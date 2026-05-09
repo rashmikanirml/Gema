@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
+const models = require('./models');
+const seedDatabase = require('./config/seeder');
 
 const app = express();
 
@@ -14,6 +16,31 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Static files
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Database initialization
+const initializeDatabase = async () => {
+  try {
+    console.log('🔄 Initializing database connection...');
+    await models.sequelize.authenticate();
+    console.log('✅ Database authenticated successfully');
+
+    // Sync models with database
+    await models.sequelize.sync({ alter: true });
+    console.log('✅ Database models synchronized');
+
+    // Seed initial data (only if tables are empty)
+    const roleCount = await models.Role.count();
+    if (roleCount === 0) {
+      console.log('📊 Running database seeders...');
+      await seedDatabase();
+    } else {
+      console.log('✅ Database already seeded, skipping seeder');
+    }
+  } catch (error) {
+    console.error('❌ Database initialization error:', error);
+    // Don't exit, allow server to continue (helpful for debugging)
+  }
+};
 
 // Basic route
 app.get('/api/health', (req, res) => {
@@ -47,9 +74,12 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, async () => {
   console.log(`🚀 Gema Backend Server running on http://localhost:${PORT}`);
   console.log(`📡 Health check: http://localhost:${PORT}/api/health`);
+  
+  // Initialize database after server starts
+  await initializeDatabase();
 });
 
 module.exports = app;
